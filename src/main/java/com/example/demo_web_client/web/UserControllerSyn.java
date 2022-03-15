@@ -1,7 +1,7 @@
 package com.example.demo_web_client.web;
 
-import com.example.demo_web_client.dao.UserReactiveRepo;
 import com.example.demo_web_client.model.User;
+import com.example.demo_web_client.service.UserReactiveService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -14,33 +14,33 @@ import java.util.UUID;
 @RequestMapping("/Api-users")
 public class UserControllerSyn {
     @Autowired
-    UserReactiveRepo userRepo;
+    UserReactiveService userReactiveService;
 
 
     @GetMapping(value = "/")
     public Flux<User> findAll() {
 
-        return userRepo.findAll();
+        return userReactiveService.findAll();
     }
 
     @GetMapping(value = "/{id}")
     public Mono<User> findById(@PathVariable("id") String id) {
 
-        return userRepo.findById(id);
+        return userReactiveService.findById(id);
 
     }
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<User> create(@RequestBody User user) {
         user.setId(UUID.randomUUID().toString());
-        return userRepo.insert(user);
+        return userReactiveService.insert(user);
     }
 
     @PutMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Mono<User> update(@PathVariable( "id" ) String id, @RequestBody User user) {
         user.setId(id);
-        return userRepo.save(user);
+        return userReactiveService.save(user);
 
     }
 
@@ -48,7 +48,7 @@ public class UserControllerSyn {
     @ResponseStatus(HttpStatus.OK)
     public Mono<Void> delete(@PathVariable("id") String id) {
 
-        return userRepo.deleteById(id);
+        return userReactiveService.deleteById(id);
     }
 
 }

@@ -13,7 +13,7 @@ public class DemoMongoJpaApplication {
     public static void main(String[] args) {
         SpringApplication.run(DemoMongoJpaApplication.class, args);
     }
-    @Bean
+/*    @Bean
     CommandLineRunner runner(UserService userService){
         return args -> {
 
@@ -21,5 +21,5 @@ public class DemoMongoJpaApplication {
 //              userService.fillUsersSynchronous();
                 userService.fillUsersAsynchronous();
         };
-    }
+    }*/
 }

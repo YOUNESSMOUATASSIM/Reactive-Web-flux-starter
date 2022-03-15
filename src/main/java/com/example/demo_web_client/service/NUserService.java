@@ -1,7 +1,7 @@
 package com.example.demo_web_client.service;
 
-import com.example.demo_web_client.dao.UserReactiveRepo;
-import com.example.demo_web_client.dao.UserRepo;
+import com.example.demo_web_client.repositories.UserReactiveRepo;
+import com.example.demo_web_client.repositories.UserRepo;
 import com.example.demo_web_client.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
@@ -17,11 +17,11 @@ import java.util.UUID;
 @Service
 public class NUserService implements UserService{
     @Autowired
-    UserRepo userRepoNonReactive;
+    UserRepo userRepo;
     @Autowired
     IWebClientHttp iwebClientHttp;
     @Autowired
-    UserReactiveRepo userRepo;
+    UserReactiveRepo userReactiveRepo;
     // WONT WORK I DONT KNOW WHY !!
 //    @Autowired
 
@@ -29,7 +29,7 @@ public class NUserService implements UserService{
     @Override
     public void fillUsersSynchronous() {
 
-            userRepoNonReactive.deleteAll();
+            userRepo.deleteAll();
             User[] response = iwebClientHttp.getWebClientByUrl("https://gorest.co.in/public/v2/users")
                     .get()
                     .accept(MediaType.APPLICATION_JSON)
@@ -47,7 +47,7 @@ public class NUserService implements UserService{
                 user.setEmail(value.getEmail());
                 user.setGender(value.getGender());
                 user.setStatus(value.getStatus());
-                userRepoNonReactive.save(user);
+                userRepo.save(user);
             }
              System.out.println("SYNCHRONOUS COMPLETED SUCCESSFULLY !!!!");
     }
@@ -56,7 +56,7 @@ public class NUserService implements UserService{
     @Override
     public void fillUsersAsynchronous() {
 
-       userRepo.deleteAll().subscribe(null,null,()-> {
+       userReactiveRepo.deleteAll().subscribe(null,null,()-> {
            iwebClientHttp.getWebClientByUrl("https://gorest.co.in/public/v2/users")
                    .method(HttpMethod.GET)
                    .exchangeToFlux(response -> {
@@ -73,7 +73,7 @@ public class NUserService implements UserService{
                                user1.setEmail(user.getEmail());
                                user1.setGender(user.getGender());
                                user1.setStatus(user.getStatus());
-                               userRepo.save(user1).subscribe(u -> {
+                               userReactiveRepo.save(user1).subscribe(u -> {
 
 
                                });
