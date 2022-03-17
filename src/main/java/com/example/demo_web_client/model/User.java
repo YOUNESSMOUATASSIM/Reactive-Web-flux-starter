@@ -6,9 +6,11 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.io.Serializable;
+
 @Document
 @AllArgsConstructor @NoArgsConstructor @Data
-public class User {
+public class User implements Serializable {
     @Id
     private String id;
     private String name;
